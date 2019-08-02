@@ -1,9 +1,12 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Comment from './components/Comment.jsx'
+import App from './views/App.jsx'
+// require('antd/dist/antd.css')
+// import './style.css'
+// import 'antd/dist/antd.css';
 
 ReactDOM.render(
-  <Comment></Comment>,
+  <App/>,
   document.getElementById('content')
 );

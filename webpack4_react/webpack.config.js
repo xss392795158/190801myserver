@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname,  './src/main.jsx')
+    app: [require.resolve('babel-polyfill'), path.resolve(__dirname,  './src/main.jsx')]//'babel-polyfill'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -16,11 +16,25 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json']
   },
+  devtool: 'inline-source-map',
+  // devtool: 'inline-cheap-source-map',// 父一级错误行
+  // devtool: 'inline-cheap-module-source-map',// 包括modules的错误行
+  // devtool: 'cheap-module-eval-source-map',
+  // devtool: 'eval',// 一行内的错误
   module: {
     unknownContextCritical : false,
     rules: [
       {
         test: /\.css$/,
+        include: /node_modules/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' }
+        ] 
+      }, 
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           { loader: 'style-loader' },
           {
@@ -29,10 +43,37 @@ module.exports = {
               modules: true
             }
           },
-          { loader: 'sass-loader' }
         ] 
       }, 
-      { test: /\.js|jsx$/, use: 'babel-loader', exclude: /node_modules/ },
+      {
+        test: /\.scss$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader', 
+            // options: {
+            //   modules: true
+            // }
+          },
+          {
+            loader: 'sass-loader'
+          }
+        ] 
+      }, 
+      // { test: /\.js|jsx$/, use: 'babel-loader', exclude: /node_modules/ },
+      { 
+        test: /\.(js|jsx)?$/, 
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            babelrc: true,
+            // plugins: [
+            //   ["import", [{}]]
+            // ]
+          }
+        }]
+      },
       // {
       //   test:/\.jsx$/, 
       //   loaders:['jsx-loader?harmony']
