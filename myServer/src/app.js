@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost/xss', { useNewUrlParser: true }, (err,res)
 });
 
 // var MySchema = new Schema;
-var MySchema = new Schema({ name: String, color: String, sex: String, age: Number, createTime: String, _id: String}, {collation: 'data'});
+var MySchema = new Schema({ name: String, color: String, sex: String, age: Number, createTime: String}, {collation: 'data'});//, _id: String
 // MySchema.add({ name: 'string', color: 'string', price: 'number' })
 // MySchema.add({ name: String, color: String, sex: String, age: Number, createTime: String, _id: String})
 
@@ -91,7 +91,7 @@ app.post('/cat/add', bodyParser.json(), function(req, res) {
     "message": 'insert error'
   };
   const Cat = mongoose.model('Cat', MySchema);
-  const kitty = new Cat({ id: new mongoose.Schema.Types.ObjectId, name, color, sex, age, createTime: +new Data() });
+  const kitty = new Cat({ name, color, sex, age, createTime: +new Date() });//id: new mongoose.Types.ObjectId,
   kitty.save((err, doc) => {
     if(!err) {
       res.end(JSON.stringify(response));
@@ -122,7 +122,6 @@ app.post('/cat/list', bodyParser.json(), function(req, res) {
   // .populate([{path: 'name'}, {path: 'color'}, {path: 'sex'}, {path: 'age'},{path: 'createTime'} ])
   // .exec(function (err,result) {
     response.list = docs||[];
-    debugger
     res.end(JSON.stringify(response));
     // if(!err) {
     //   response.list = result;

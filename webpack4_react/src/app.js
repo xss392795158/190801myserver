@@ -17,7 +17,6 @@ app.use('./static', express.static(__dirname + '/dist'));
   // res.sendFile(path.resolve("./dist/index.html"));
   res.sendFile(path.resolve(__dirname,'../index.html'));
   /* fs.readFile(__dirname+'/dist/webapp.html', function(err, data){
-    debugger
     res.end(data.toString())
   }) *
 }) */

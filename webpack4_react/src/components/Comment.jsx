@@ -4,13 +4,13 @@
  * @Author: xushanshan
  * @Date: 2019-08-02 15:25:24
  * @LastEditors: xushanshan
- * @LastEditTime: 2019-08-05 17:32:07
+ * @LastEditTime: 2019-08-06 18:05:20
  */
 import React from 'react'
+import { connect } from 'react-redux';
 import axios from 'axios'
 import moment from 'moment'
 import { Table, Divider, Tag, Result, Form, Input, Button } from 'antd';
-import './style.scss'
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -53,63 +53,8 @@ const columns = [
         {moment(createTime).format('YYYY-MM-DD HH:mm:ss')}
       </span>
     )
-  },
-  // {
-  //   title: 'Tags',
-  //   key: 'tags',
-  //   dataIndex: 'tags',
-  //   render: tags => (
-  //     <span>
-  //       {tags.map(tag => {
-  //         let color = tag.length > 5 ? 'geekblue' : 'green';
-  //         if (tag === 'loser') {
-  //           color = 'volcano';
-  //         }
-  //         return (
-  //           <Tag color={color} key={tag}>
-  //             {tag.toUpperCase()}
-  //           </Tag>
-  //         );
-  //       })}
-  //     </span>
-  //   ),
-  // },
-  // {
-  //   title: 'Action',
-  //   key: 'action',
-  //   render: (text, record) => (
-  //     <span>
-  //       <a href="javascript:;">Invite {record.name}</a>
-  //       <Divider type="vertical" />
-  //       <a href="javascript:;">Delete</a>
-  //     </span>
-  //   ),
-  // },
+  }
 ];
-
-/* const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-]; */
 
 class Comment extends React.Component{
   state = {
@@ -117,7 +62,7 @@ class Comment extends React.Component{
       repoUrl:'',
       getRst: false,
       rstStatus: null,
-      catsList: []
+      catsList: [],
   };
   componentDidMount(){
     this.initTable()
@@ -176,14 +121,21 @@ class Comment extends React.Component{
             const data = response.data;
             // const {xingPost,mingPost} = result;
             if(data.code == 200) {
-              this.setState({getRst: true, rstStatus: 1})
+              this.showResult(true);
+              // this.setState({getRst: true, rstStatus: 1})
             } else {
-              this.setState({getRst: true, rstStatus: 0})
+              this.showResult();
+              // this.setState({getRst: true, rstStatus: 0})
             }
         });
       }
     });
   };
+  showResult(rst) {
+    if(this.props.showResult) {
+      this.props.showResult(rst);
+    }
+  }
   render() {
     const { getFieldDecorator, getFieldsError } = this.props.form;
     
@@ -238,8 +190,13 @@ class Comment extends React.Component{
         <Button type="primary" htmlType="button" onClick={this.initTable.bind(this)}>
           获取list
         </Button>
-        <Table columns={columns} dataSource={this.state.catsList} />
-        {this.state.getRst && (this.state.rstStatus == 1?<Result
+        userName: {this.props.userName}<br/>
+        projectName: {this.props.projectName}
+        <Button type="primary" htmlType="button" onClick={this.showResult.bind(this)}>
+          切换projectName
+        </Button>
+        <Table columns={columns} dataSource={this.state.catsList} rowKey='_id' />
+        {/* this.state.getRst && (this.state.rstStatus == 1?<Result
               status="success"
               title="Successfully!"
               subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
@@ -259,10 +216,41 @@ class Comment extends React.Component{
               </Button>,
               <Button key="buy">Buy Again</Button>,
             ]}
-        />)}
+        />) */}
       </div>
     )
   }
 }
 const WrappedComment = Form.create({ name: 'horizontal_login' })(Comment);
-export default WrappedComment;
+
+function showResult(rst) {
+  return {
+    type: 'TOGGLE_RESULT',
+    show: true,
+    status: rst?1:0
+  }
+}
+
+// Which part of the Redux global state does our component want to receive as props?
+function mapStateToProps(state) {
+  return {
+    show: state.global.show,
+      // projectName: state.project.name,
+  };
+}
+
+// Which action creators does it want to receive by props?
+function mapDispatchToProps(dispatch) {
+  return {
+    showResult: (rst) => {
+      dispatch(showResult(rst))
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WrappedComment);
+
+// export default WrappedComment;
