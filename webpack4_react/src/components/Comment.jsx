@@ -4,7 +4,7 @@
  * @Author: xushanshan
  * @Date: 2019-08-02 15:25:24
  * @LastEditors: xushanshan
- * @LastEditTime: 2019-08-06 18:05:20
+ * @LastEditTime: 2019-08-09 14:49:44
  */
 import React from 'react'
 import { connect } from 'react-redux';
@@ -68,7 +68,7 @@ class Comment extends React.Component{
     this.initTable()
   }
   initTable() {
-    const url = `http://127.0.0.1:8088/cat/list`;
+    const url = `http://127.0.0.1:8088/v1/cat/list`;
     let data = {};
     let promise = axios.post(url, data, OPTIONS);
 
@@ -89,7 +89,7 @@ class Comment extends React.Component{
       if (!err) {
         // console.log('Received values of form: ', values);
         // const url = `https://api.github.com/search/repositories?q=r&sort=stars`;
-        const url = `http://127.0.0.1:8088/process_get?first_name=xu&last_name=shanshan`;
+        const url = `http://127.0.0.1:8088/v1/process_get?first_name=xu&last_name=shanshan`;
         // const url = `my_test`;
         let promise = axios.get(url);
         promise.then(response=>{
@@ -105,17 +105,35 @@ class Comment extends React.Component{
       }
     });
   };
+  
   handleSubmitPost = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // const url = `https://api.github.com/search/repositories?q=r&sort=stars`;
         // const url = `http://127.0.0.1:8088/process_post`;//?first_name=xu&last_name=shanshan
-        const url = `http://127.0.0.1:8088/cat/add`;
+        // const url = `http://127.0.0.1:8088/v1/cat/add`;
+        let { id, category, name, photoUrls, tags, status} = values;
+        debugger
+        let param = {id, name, status};
+        param.category = {
+          id: Math.random()*100,
+          name: category
+        }
+        param.photoUrls = [photoUrls];
+        param.tags = [{
+          id: Math.random()*100,
+          name: tags
+        }]
+        axios.post('/pet', param).then((response) => {
+          // response
+          debugger
+        }).catch(err => {
+          debugger
+
+        })
         // const url = `my_test`;
-        let { name, color, sex, age} = values;
-        let data = {name, color, sex, age};
-        let promise = axios.post(url, data, OPTIONS);
+        /* let promise = axios.post(url, data, OPTIONS);
         promise.then(response=>{
             console.log(response);
             const data = response.data;
@@ -127,7 +145,7 @@ class Comment extends React.Component{
               this.showResult();
               // this.setState({getRst: true, rstStatus: 0})
             }
-        });
+        }); */
       }
     });
   };
@@ -142,6 +160,24 @@ class Comment extends React.Component{
     return (
       <div className="myForm">
         <Form className="login-form">
+          <Form.Item label="id">
+          {getFieldDecorator('id', {
+            rules: [{ required: true, message: 'Please input your id!' }],
+          })(
+            <Input
+              placeholder="id"
+            />,
+          )}
+          </Form.Item>
+          <Form.Item label="category">
+          {getFieldDecorator('category', {
+            rules: [{ required: true, message: 'Please input your category!' }],
+          })(
+            <Input
+              placeholder="category"
+            />,
+          )}
+          </Form.Item>
           <Form.Item label="name">
           {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your name!' }],
@@ -151,30 +187,30 @@ class Comment extends React.Component{
             />,
           )}
           </Form.Item>
-          <Form.Item label="color">
-          {getFieldDecorator('color', {
-            rules: [{ required: true, message: 'Please input your color!' }],
+          <Form.Item label="photoUrls">
+          {getFieldDecorator('photoUrls', {
+            rules: [{ required: true, message: 'Please input your photoUrls!' }],
           })(
             <Input
-              placeholder="color"
+              placeholder="photoUrls"
             />,
           )}
           </Form.Item>
-          <Form.Item label="sex" help="Should be 'F' or 'M'">
-          {getFieldDecorator('sex', {
-            rules: [{ required: true, message: 'Please input your sex!' }],
+          <Form.Item label="tags">
+          {getFieldDecorator('tags', {
+            rules: [{ required: true, message: 'Please input your tags!' }],
           })(
             <Input
-              placeholder="sex"
+              placeholder="tags"
             />,
           )}
           </Form.Item>
-          <Form.Item label="age" help="Should be numbers">
-          {getFieldDecorator('age', {
-            rules: [{ required: true, message: 'Please input your age!' }],
+          <Form.Item label="status" help="Should be 'F' or 'M'">
+          {getFieldDecorator('status', {
+            rules: [{ required: true, message: 'Please input your status!' }],
           })(
             <Input
-              placeholder="age"
+              placeholder="status"
             />,
           )}
           </Form.Item>
@@ -182,7 +218,7 @@ class Comment extends React.Component{
             {/* <Button type="primary" htmlType="button" onClick={this.handleSubmit} disabled={hasErrors(getFieldsError())}>
               Log in GET
             </Button> */}
-            <Button type="primary" htmlType="button" onClick={this.handleSubmitPost} disabled={hasErrors(getFieldsError())}>
+            <Button type="primary" htmlType="button" onClick={this.handleSubmitPost.bind(this)} disabled={hasErrors(getFieldsError())}>
               Add我的🐱
             </Button>
           </Form.Item>
@@ -196,27 +232,6 @@ class Comment extends React.Component{
           切换projectName
         </Button>
         <Table columns={columns} dataSource={this.state.catsList} rowKey='_id' />
-        {/* this.state.getRst && (this.state.rstStatus == 1?<Result
-              status="success"
-              title="Successfully!"
-              subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
-              extra={[
-                <Button type="primary" key="console">
-                  Go Console
-                </Button>,
-                <Button key="buy">Buy Again</Button>,
-              ]}
-            />:<Result
-            status="error"
-            title="Submission Failed"
-            subTitle="Please check and modify the following information before resubmitting."
-            extra={[
-              <Button type="primary" key="console">
-                Go Console
-              </Button>,
-              <Button key="buy">Buy Again</Button>,
-            ]}
-        />) */}
       </div>
     )
   }

@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import axios from 'axios'
 import { connect } from 'react-redux';
 import WrappedComment from '../components/Comment.jsx'
 import MyResult from '../components/MyResult.jsx'
@@ -18,7 +19,55 @@ import '../assets/style/index.scss'
 
 class App extends React.Component{
   changeState() {
-    this.props.changeState && this.props.changeState();
+    /* let r = new Test({domain: 'http://127.0.0.1:8088'});
+    let param = {
+      body: {
+        "id": 0,
+        "category": {
+          "id": 0,
+          "name": "string"
+        },
+        "name": "doggie",
+        "photoUrls": [
+          "string"
+        ],
+        "tags": [
+          {
+            "id": 0,
+            "name": "string"
+          }
+        ],
+        "status": "available"
+      }
+      // body: { name: '测试猫', color:'rainbow', sex:'f', age:3}
+    }
+    let rst = r.addPet(param).then((res) => {
+      //res
+      debugger
+    }).catch(err => {
+      // err
+      debugger
+    }) */
+    // this.props.changeState && this.props.changeState();
+    /* let url = 'http://127.0.0.1:8088/pet';
+    let data = {
+      "id": 0,
+      "category": {
+        "id": 0,
+        "name": "string"
+      },
+      "name": "doggie",
+      "photoUrls": [
+        "string"
+      ],
+      "tags": [
+        {
+          "id": 0,
+          "name": "string"
+        }
+      ],
+      "status": "available"
+    } */
   }
   render() {
     return (
@@ -28,7 +77,7 @@ class App extends React.Component{
         projectName: {this.props.projectName}<br/>
         <Input placeholder="name" id="userName" />
         <Button type="primary" htmlType="button" onClick={this.changeState.bind(this)}>
-          APP操作UserName
+          swagger操作猫
         </Button>
         <WrappedComment></WrappedComment>
         {this.props.show?<MyResult></MyResult>:null}

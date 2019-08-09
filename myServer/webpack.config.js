@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: xushanshan
+ * @Date: 2019-08-01 20:38:37
+ * @LastEditors: xushanshan
+ * @LastEditTime: 2019-08-09 16:15:26
+ */
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //通过 npm 安装
 const webpack = require('webpack'); //访问内置的插件
 const path = require('path');
@@ -5,7 +13,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname,  './src/app.js')
+    app: path.resolve(__dirname,  './app.js')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
