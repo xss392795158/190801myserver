@@ -14,7 +14,7 @@
     "babel-polyfill": "^6.26.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   },
   "browser": {
     "child_process": false
