@@ -26,7 +26,7 @@
     "file-loader": "^4.1.0",
     "fs": "0.0.1-security",
     "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^6.1.4",
     "path": "^0.12.7",
@@ -37,7 +37,7 @@
     "supertest": "^4.0.2",
     "ts-loader": "^6.0.4",
     "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^3.7.0"
   }
 }
